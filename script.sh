@@ -88,7 +88,7 @@ $LIVE && rm -f $WD/games0.html && wget -O $WD/games0.html $HOST/"$system"/catego
 sleep $WAIT_TIME
 
 # Extract number of pages of games
-maxpage=$(cat $WD/games0.html | grep ' of [[:digit:]]\+</li>' | sed 's/.*\([[:digit:]]\+\).\+/\1/')
+maxpage=$(cat $WD/games0.html | grep ' of [[:digit:]]\+</li>' | sed 's/.\+\s\([[:digit:]]\+\).\+/\1/')
 if [[ -z "$maxpage" ]]; then maxpage=0; fi
 $VERBOSE && echo "Number of pages: $maxpage"
 
