@@ -57,6 +57,8 @@ SYSTEM_LIST="system_list.txt"
 GAME_LINKS="game_links.txt"
 FAQ_LINKS="faq_links.txt"
 
+echo "Working..."
+
 # Fetch list of systems
 if [[ -e $SYSTEM_LIST ]]
 then
@@ -79,8 +81,6 @@ then
     exit
 fi
 
-echo "Working..."
-
 $VERBOSE && echo "System: $system"
 
 # Fetch first page of games
@@ -93,7 +93,7 @@ if [[ -z "$maxpage" ]]; then maxpage=0; fi
 $VERBOSE && echo "Number of pages: $maxpage"
 
 # Extract game links from first page
-mv $GAME_LINKS $WD/$GAME_LINKS.old
+rm -f $GAME_LINKS
 cat $WD/games0.html | grep "/$system/" | grep "Guides" | grep "<td class=" | awk '{$1=$1};1' | cut -c28- | sed 's/faqs.*/faqs/' | awk '$0="'$HOST'"$0' >> $GAME_LINKS
 $VERBOSE && echo "Parsed game links from page 0: " $(cat $GAME_LINKS | wc -l) "(" $(tail -1 $GAME_LINKS) ")"
 
@@ -117,7 +117,7 @@ mv $GAME_LINKS $WD/$GAME_LINKS.raw
 cat $WD/$GAME_LINKS.raw | sort | uniq > $GAME_LINKS
 
 # Loop over each game, collecting all FAQs
-mv $FAQ_LINKS $WD/$FAQ_LINKS.old
+rm -f $FAQ_LINKS
 cat $GAME_LINKS | while read line
 do
     $LIVE && rm -f $WD/game.html && wget -O $WD/game.html "$line"
